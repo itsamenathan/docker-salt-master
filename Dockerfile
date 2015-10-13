@@ -1,18 +1,26 @@
-FROM debian:wheezy
+FROM debian:jessie
+MAINTAINER Nathan Warner <nathan@frcv.net>
 
-MAINTAINER Bruno Binet <bruno.binet@helioslite.com>
-
+ENV SALT_VERSION 2015.8.0+ds-2
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "deb http://debian.saltstack.com/debian wheezy-saltstack-2015-05 main" > /etc/apt/sources.list.d/salt.list
-ADD debian-salt-team-joehealy.gpg.key /tmp/debian-salt-team-joehealy.gpg.key
-RUN apt-key add /tmp/debian-salt-team-joehealy.gpg.key && \
-  rm /tmp/debian-salt-team-joehealy.gpg.key
+RUN echo "deb http://repo.saltstack.com/apt/debian jessie contrib" > /etc/apt/sources.list.d/salt.list
+ADD SALTSTACK-GPG-KEY.pub /tmp/SALTSTACK-GPG-KEY.pub
+RUN apt-key add /tmp/SALTSTACK-GPG-KEY.pub && \
+    rm /tmp/SALTSTACK-GPG-KEY.pub
 
-ENV SALT_VERSION 2015.5.0+ds-1~bpo70+1
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-  salt-master=${SALT_VERSION} salt-api=${SALT_VERSION} \
-  python-git python-openssl python-cherrypy3 python-pip
+
+RUN apt-get --quiet --yes update && \
+    apt-get --quiet --yes install \
+      salt-master=${SALT_VERSION} \
+      salt-api=${SALT_VERSION} \
+      python-git \
+      python-openssl \
+      python-cherrypy3 \
+      python-pip \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists
 
 RUN pip install Halite
 
