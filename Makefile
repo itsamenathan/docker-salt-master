@@ -17,6 +17,6 @@ tag_latest:
 release: tag_latest
 	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	@if ! head -n 1 Changelog.md | grep -q $(VERSION); then echo 'Please note the release version and date in Changelog.md.' && false; fi
-	#docker push $(NAME)
+	docker push $(NAME)
 	@echo "*** Don't forget to create a tag. git tag v$(VERSION) && git push origin v$(VERSION)"
 
