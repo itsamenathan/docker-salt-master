@@ -4,9 +4,9 @@ MAINTAINER Nathan Warner <nathan@frcv.net>
 ENV SALT_VERSION 2015.8.0+ds-2
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "deb http://repo.saltstack.com/apt/debian jessie contrib" > /etc/apt/sources.list.d/salt.list
 ADD SALTSTACK-GPG-KEY.pub /tmp/SALTSTACK-GPG-KEY.pub
-RUN apt-key add /tmp/SALTSTACK-GPG-KEY.pub && \
+RUN echo "deb http://repo.saltstack.com/apt/debian jessie contrib" > /etc/apt/sources.list.d/salt.list && \
+    apt-key add /tmp/SALTSTACK-GPG-KEY.pub && \
     rm /tmp/SALTSTACK-GPG-KEY.pub
 
 
@@ -16,13 +16,12 @@ RUN apt-get --quiet --yes update && \
       salt-api=${SALT_VERSION} \
       python-git \
       python-openssl \
-      python-cherrypy3 \
       python-pip \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists
 
-RUN pip install Halite
+RUN pip install --upgrade cherrypy
 
 ADD run.sh /run.sh
 RUN chmod a+x /run.sh
