@@ -1,5 +1,5 @@
 NAME = itsamenathan/salt-master
-VERSION = 2015.8.0-1
+VERSION = 2015.8.1
 
 .PHONY: all build test tag_latest release
 
